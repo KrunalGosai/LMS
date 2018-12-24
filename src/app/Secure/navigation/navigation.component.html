@@ -1,0 +1,45 @@
+<div class="category-search-bar">
+    <div class="inner-container">
+        <div class="search-box mobile-searchbox">
+            <input type="text" [(ngModel)]=searchtxt class="search-textfld" placeholder="Search book name here....">
+            <div>
+                <a class="search-btn" (click)="isNeedAnchorTagDisabled() && navigateToSearch()">
+                    <img src="~/../assets/Images/search-icon.png">
+                </a>
+            </div>
+        </div>
+        <div class="category-menu-box">
+            <div class="category-button">
+                {{currentCategory}}
+                <img src="~/../assets/Images/category-menu-icon-bk.png" class="inactive">
+                <img src="~/../assets/Images/category-menu-icon-wh.png" class="active">
+            </div>
+            <ul class="category-listing">
+                <li class="category-item">
+                    <a (click)="navigateToCategory('All')">
+                        All
+                    </a>
+                </li>
+                <li *ngFor="let category of categoryList; let i = Index" class="category-item">
+                    <a (click)="navigateToCategory(category.Category_Name)">
+                        {{category.Category_Name}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="search-box desktop-searchbox">
+            <input type="text" [(ngModel)]=searchtxt (keydown.enter)="isNeedAnchorTagDisabled() && navigateToSearch()"
+                class="search-textfld" placeholder="Search book name here....">
+            <a class="search-btn" (click)="isNeedAnchorTagDisabled() && navigateToSearch()">
+                <img src="~/../assets/Images/search-icon.png">
+            </a>
+        </div>
+        <div class="sorting-box">
+            <a role="button" (click)="navigateToShort()">
+                <div class="sorting-btn asc-sorting">
+                    Sorting
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<header class="header">
+    <div class="my-acct-login-bar">
+        <div class="inner-page-container">
+            <div class="login-button">
+                Welcome {{getuserName | titlecase}}
+            </div>
+        </div>
+    </div>
+    <div class="logo-menu-bar">
+        <div class="inner-page-container">
+            <div class="logo-box">
+                <a [routerLink]="['']">
+                    <img src="~/../assets/Images/br_logo.jpg">
+                </a>
+            </div>
+            <div class="menu-toggle">
+                <div class="one"></div>
+                <div class="two"></div>
+                <div class="three"></div>
+            </div>
+            <div class="user-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <ul class="menu-list">
+                <li>
+                    <a [routerLink]="['']" (click)="currentMenu = 'dashbord';">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        E-books
+                    </a>
+                </li>
+                <li>
+                    <a [ngClass]="currentMenu == 'myactivity' ? 'active': ''" [routerLink]="['/book-return',getuserName]"
+                        (click)="currentMenu = 'myactivity';">
+                        My Activities
+                    </a>
+                    <!-- <a [routerLink]="['admin/book-listing']">
+                        My Activities
+                    </a> -->
+                </li>
+                <li [ngClass]="isAdmin == true ? '': 'isAdmin'">
+                    <!-- <li> -->
+                    <a [ngClass]="currentMenu == 'admin' ? 'active': ''" [routerLink]="['/admin/book-listing']" (click)="currentMenu = 'admin';">
+                        Admin
+                    </a>
+                </li>
+                <li>
+                    <a [ngClass]="currentMenu == 'donate' ? 'active': ''" [routerLink]="['/donate']" (click)="currentMenu = 'donate';">
+                        Donate
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="inner-page-search-bar">
+
+    </div>
+</header>

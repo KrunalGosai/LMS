@@ -1,0 +1,28 @@
+a:hover{ text-decoration: none !important; color: #333;}
+.pl-image-box img{max-height: 258px;min-height: 258px;}
+.mpb-button-send {border: none;}
+.pl-delete-btn:disabled , .mpb-button-send:disabled {opacity: 0.5;}
+.history-link-admin {font-size: 18px;}
+.returnedFormClass input[type="radio"],.requestFormClass input[type="radio"],.requestFormClass input[type="radio"]{margin-bottom: 15px;}
+.rejected{margin-left: 15px;}
+
+/* style change table 12-13-2018 */
+table.plib-withdraw-info tr{border: 1px solid #ccc;}
+table.plib-withdraw-info td:nth-child(3) {
+    width: 50px;
+}
+table.plib-withdraw-info tr td:nth-child(1){width: 140px;
+    font-weight: 400;
+    color: #909090;
+    float: left;
+    font-size: 15px;
+    margin-bottom: 0;
+    border-right: 1px solid #ccc;
+    padding: 10px 0 10px 15px;}
+    table.plib-withdraw-info tr td:nth-child(2) {
+        font-weight: 500;
+        color: #333;
+        font-size: 16px;
+        float: left;
+        padding:10px 15px;
+    }

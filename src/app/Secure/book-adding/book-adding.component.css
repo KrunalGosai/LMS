@@ -1,0 +1,6 @@
+.product-donner label { padding-right: 15px; float: left; }
+.pbr-save-btn[disabled] { opacity: 0.5; }
+.product-title { height: 105px; margin-bottom: 0px; }
+.product-dec {margin-bottom: 0px;}
+.product-info {margin-top: 0px;}
+.product-info li { height: 67px;}

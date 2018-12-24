@@ -1,0 +1,4 @@
+/* / Start of Footer Part CSS / */
+footer, .footer { background: #eaeaea; padding: 10px; text-align: center; color: #333; font-size: 15px; } 
+.gotop{position: fixed; z-index: 555; right: 7%; bottom: 50px; height: 40px; width: 40px; background: #333333; border-radius: 5px; color: #e13d34; text-align: center; font-weight: 400; font-size: x-large; padding-top: 3px;}
+/* / End of Footer Part CSS / */

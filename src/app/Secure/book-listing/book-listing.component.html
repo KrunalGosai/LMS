@@ -1,0 +1,165 @@
+<title>LMS | Book List</title>
+<div class="category-search-bar">
+  <div class="inner-container">
+    <div class="search-box mobile-searchbox">
+      <input type="text" class="search-textfld" (keydown.enter)="OnBookFilter()" placeholder="Search book name here....">
+      <div class="search-btn">
+        <a class="search-btn" (click)="OnBookFilter()">
+          <img src="~/../assets/Images/search-icon.png">
+        </a>
+      </div>
+    </div>
+    <div class="category-menu-box">
+
+      <select class="product-info-txtfld" [(ngModel)]="filterBookStatus" (change)="OnBookFilter()">
+        <option value="0">Filter by Availability (All Books)</option>
+        <option *ngFor="let status of bookStatus" value={{status.ID}}>{{status.Book_status}} </option>
+      </select>
+
+    </div>
+
+    <div class="search-box desktop-searchbox">
+      <input type="text" class="search-textfld" [(ngModel)]="bookSearchByName" (keydown.enter)="OnBookFilter()" placeholder="Search book name here....">
+      <div class="search-btn">
+        <a class="search-btn" (click)="OnBookFilter()">
+          <img src="~/../assets/Images/search-icon.png">
+        </a>
+
+
+      </div>
+    </div>
+    <div class="sorting-box">
+      <a href="admin/book-adding" style="float: left;">
+        <input type="button" class="pbr-save-btn" value="Add Book" style="float:right; margin-right:134px ;">
+      </a>
+    </div>
+  </div>
+</div>
+<section class="section">
+  <div class="admin-nav">
+    <button type="button" (click)="navigateToAdminDashBoard()" class="btn btn-primary">Statistic Dashboard</button>
+  </div>
+  
+  <p *ngIf="isShowNoData && (currentBookDetails == undefined || currentBookDetails.length == 0)" class="noData">No books found!</p>
+  <div class="hp-row" *ngFor="let bookList of currentBookDetails; let i = index">
+    <book-item [bookList]="bookList" 
+      (onBookFilter)="OnBookFilter()" 
+      (showHistoryDialogBox)="showHistoryDialog($event)"
+      (notifyPopup)="togglePopup($event)"
+      (deleteBookById)="deleteBook($event)"
+    ></book-item>
+  </div>
+
+  
+
+  <!-- <form [formGroup]="mailForm"  #bookForm="ngForm" >
+      <div class="inner-page-container">
+        <label for="name">To : </label>        
+        <input type="text" name="txtTo" placeholder="TO" formControlName="txtTo" id="txtTo">
+      </div>
+      <div class="inner-page-container">
+        <label for="email">CC : </label>
+        <input type="text" name="txtCc" placeholder="CC" formControlName="txtCc" id="txtCc">
+      </div>
+      <div class="inner-page-container">
+        <label for="message">Message : </label>
+      <textarea rows="6" name="txtMessage" formControlName="txtMessage" id="txtMessage" ></textarea>
+      </div>
+      <div class="inner-page-container">
+          <button type="submit" (click)="sendMail(mailForm)" >Send Email</button>
+      </div>       
+    </form> -->
+</section>
+<app-loader></app-loader>
+<div class="mail-popup-box" *ngIf="isMailPopupShow">
+  <div class="mpb-full-background"></div>
+  <div class="mpb-opopup-window">
+    <div class="mpb-header">
+      <span>Send mail</span>
+      <!-- Closes the mail box on click -->
+      <div class="mpb-close-btn" (click)="closeMailBox()">
+        <i class="fas fa-times"></i>
+      </div>
+    </div>
+    <div class="mpb-content">
+      <div class="mpb-form">
+        <form [formGroup]="mailForm" #bookForm="ngForm">
+          <div class="mpb-full-row">
+            <label>To</label>
+            <input type="text" name="txtTo" placeholder="TO" formControlName="txtTo" id="txtTo">
+            <div *ngIf="mailForm.controls['txtTo'].invalid && (mailForm.controls['txtTo'].dirty || mailForm.controls['txtTo'].touched)"
+              class="alert alert-danger validationMessage">
+              <!-- <div *ngIf="mailForm.controls['txtTo'].errors.required || mailForm.controls['txtTo'].errors.validEmailId"> -->
+                Enter valid To email address.
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="mpb-full-row">
+            <label>CC</label>
+            <input type="text" name="txtCc" placeholder="CC" formControlName="txtCc" id="txtCc">
+            <div *ngIf="mailForm.controls['txtCc'].invalid && (mailForm.controls['txtCc'].dirty || mailForm.controls['txtCc'].touched)"
+              class="alert alert-danger validationMessage">
+              <!-- <div *ngIf="mailForm.controls['txtCc'].errors.validEmailId"> -->
+                Enter valid CC address.
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="mpb-full-row">
+            <label>Message</label>
+            <textarea rows="6" name="txtMessage" formControlName="txtMessage" id="txtMessage"></textarea>
+          </div>
+          <div class="mpb-button-row">
+            <div>
+              <!-- Added to auto populate the email address of the user to which mail will be sent -->
+              <button type="submit" (click)="sendMail(mailForm, mailRequestedBy)" class="mpb-button-send" [disabled]="!bookForm.form.valid">Send Email</button>
+            </div>
+            <!-- Closes the mail box on click -->
+            <div class="mpb-button-cancel" (click)="closeMailBox()">cancel</div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Opens popup for showing the history of the particular book, same popup as shown for sending mail -->
+<div class="mail-popup-box" [ngClass]="showModel ? 'show' : 'hide'">
+  <div class="mpb-full-background"></div>
+  <div class="mpb-opopup-window">
+    <div class="mpb-header">
+      <span>History</span>
+      <div class="mpb-close-btn" (click)="closeHistoryDialog()">
+        <i class="fas fa-times"></i>
+      </div>
+    </div>
+    <div class="mpb-content">
+      <div class="mpb-form">
+        <p class="no-history" *ngIf="bookHisoryData.length == 0">No History Data</p>
+        <table class="table table-striped" *ngIf="bookHisoryData.length > 0">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">User</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+              <th scope="col">Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of bookHisoryData; let ind = index">
+              <th scope="row">{{ind + 1}}</th>
+              <td>{{row.user_id}}</td>
+              <td>{{row.bookStatusDisplayName}}</td>
+              <td>{{row.issueDate | date:'dd MMM, y'}}</td>
+              <td>{{row.dueDate | date:'dd MMM, y'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('.user-icon').click(function () {
+    $('.my-acct-login-bar').toggleClass('open')
+  })
+</script>

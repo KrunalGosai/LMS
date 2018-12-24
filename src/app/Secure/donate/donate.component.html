@@ -1,0 +1,36 @@
+<title>LMS | Donate</title>
+<section class="section">
+    <div class="hp-row">
+<form [formGroup]="donateForm" (ngSubmit)="onDonateSubmit(txtBookTitle,txtMessage)">
+   
+  <div class="inner-page-container">
+      <div class="product-dtl-box">
+            <div class="form-group">
+          <div class="product-title">
+             <input type="text" formControlName="bookTitle" #txtBookTitle class="product-title-txtfld" placeholder="Book Title"  [ngClass]="{ 'is-invalid': submitted && f.bookTitle.errors }">
+             <div *ngIf="submitted && f.bookTitle.errors" class="invalid-feedback alert alert-danger">
+                <div *ngIf="f.bookTitle.errors.required">BookTitle is required</div>
+            </div>
+         </div>
+
+        <div class="product-dec">
+          <textarea class="product-dec-textared" #txtMessage placeholder="Message" formControlName="message" [ngClass]="{ 'is-invalid': submitted && f.message.errors }"></textarea>
+          <div *ngIf="submitted && f.message.errors" class="invalid-feedback alert alert-danger">
+            <div *ngIf="f.message.errors.required">Message is required</div>
+        </div>                  
+      </div>
+      </div>
+      <div class="form-group product-button-row">
+        <button class="prl-submit-btn">
+            submit
+        </button>
+        </div>
+
+      </div>
+
+  </div>
+
+</form >
+</div>
+<app-loader></app-loader>
+</section>

@@ -1,0 +1,30 @@
+.validationMessage{
+    float: right;
+    width: calc(100% - 100px);
+}
+.pl-delete-btn:disabled , .mpb-button-send:disabled {opacity: 0.5;}
+.mail-popup-box{left: 0px;}
+p { text-align: center;}
+.pbr-save-btn,.product-info-txtfld{
+    height: 50px;
+    border-radius:7px;
+}
+.desktop-searchbox{
+    display: inline;
+}
+
+.admin-nav{margin-bottom: 15px;padding: 0px 150px;}
+
+@media screen and (max-width:1024px) { 
+
+.category-menu-box {
+    //  width: 100%;
+     margin: 0 0 15px; 
+}
+.mobile-searchbox{
+    display: inline;
+}
+.desktop-searchbox{
+    display: none;
+}
+}

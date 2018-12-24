@@ -1,0 +1,169 @@
+<div class="inner-page-container">
+  <ul class="product-listing">
+    <li>
+      <div class="pl-image-box">
+        <a [routerLink]="['/book-details', bookList.ID]">
+          <img src="{{bookList.book_cover_image}}" (error)="imageError($event)">
+        </a>
+        <!-- <img src="/assets/Images/pd-image-big-1.jpg"> -->
+        <!-- {{bookList.book_cover_image}} -->
+      </div>
+      <div class="pl-info-box">
+        <div class="plib-title" title="{{bookList.book_title}}">
+          <a [routerLink]="['/book-details', bookList.ID]">
+            {{ (bookList.book_title.length>50)? (bookList.book_title | slice:0:50)+'..':(bookList.book_title) }}</a>
+        </div>
+        <div class="plib-rating-status-bar">
+          <div class="plib-rsb-rating">
+            <!-- <img src="/assets/Images/rating.png"> -->
+            <bar-rating [(rate)]="bookList.rating" [readOnly]=true [max]="5" [theme]="'stars'"></bar-rating>
+          </div>
+          <div class="plib-rsb-status avilable">
+            {{bookList.bookStatusDisplayName}}
+          </div>
+          <ul class="prl-product-dates" *ngIf="bookList.bookStatusDisplayName == 'Requested'">
+            <li>
+              <label>Requested By</label>
+              <span>{{bookList.requestedBy == null ? 'Unavailable': bookList.requestedBy}}</span>
+            </li>
+            <li class="requestFormClass">
+              <form [formGroup]="requestedByForm" (ngSubmit)="onRequestedResultSubmit(requestedResponse,bookList.requestedBy, bookList.ID)">
+                <input type="radio" formControlName="requestedRadioButton" (ngModel)="requestedResponse" value="Approved"
+                  (click)="requestedResponse = 'Approved'" [checked]="1==1"> Approved
+                <input type="radio" class="rejected" formControlName="requestedRadioButton" (ngModel)="requestedResponse"
+                  value="Rejected" (click)="requestedResponse = 'Rejected'"> Rejected
+                <div class="form-group">
+                  <button class="prl-submit-btn">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </li>
+          </ul>
+          <ul class="prl-product-dates" *ngIf="bookList.bookStatusDisplayName == 'Renew Requested'">
+            <li>
+              <label>Renew Requested By</label>
+              <span>{{bookList.requestedBy == null ? 'Unavailable': bookList.requestedBy}}</span>
+            </li>
+            <li class="requestFormClass">
+              <form [formGroup]="renewedByForm" (ngSubmit)="onRenewedResultSubmit(requestedResponse,bookList.requestedBy, bookList.ID)">
+                <input type="radio" formControlName="renewedRadioButton" (ngModel)="requestedResponse" value="Approved"
+                  (click)="requestedResponse = 'Approved'" [checked]="1==1"> Approved
+                <input type="radio" class="rejected" formControlName="renewedRadioButton" (ngModel)="requestedResponse"
+                  value="Rejected" (click)="requestedResponse = 'Rejected'"> Rejected
+                <div class="form-group">
+                  <button class="prl-submit-btn">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </li>
+          </ul>
+          <ul class="prl-product-dates" *ngIf="bookList.bookStatusDisplayName == 'Return Requested'">
+            <li>
+              <label>Returned By</label>
+              <span>{{bookList.requestedBy == null ? 'Unavailable': bookList.requestedBy}}</span>
+            </li>
+            <li class="returnedFormClass">
+              <form [formGroup]="returnedForm" (ngSubmit)="onReturnedResultSubmit(returnedResponse,bookList.requestedBy, bookList.ID)">
+                <input type="radio" formControlName="returnedRadioButton" [(ngModel)]="returnedResponse" value="Done"
+                  (click)="returnedResponse = 'Done'"> Done
+                <div class="form-group">
+                  <button class="prl-submit-btn">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </li>
+          </ul>
+          <ul class="prl-product-dates" *ngIf="bookList.bookStatusDisplayName == 'Renew Rejected'">
+              <li>
+                  <label>Renew Rejected For</label>
+                  <span>{{bookList.requestedBy == null ? 'Unavailable': bookList.requestedBy}}</span>
+                </li>
+          </ul>
+          <ul class="prl-product-dates" *ngIf="bookList.bookStatusDisplayName == 'Returned'">
+              <li>
+                  <label>Returned by</label>
+                  <span>{{bookList.requestedBy == null ? 'Unavailable': bookList.requestedBy}}</span>
+                </li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="bookList.bookStatusDisplayName == 'Issued' || bookList.bookStatusDisplayName == 'Renewed'">
+        <!-- <ul class="plib-withdraw-info">
+          <li>
+            <label *ngIf="bookList.bookStatusDisplayName == 'Issued'">Issued For</label>
+            <label *ngIf="bookList.bookStatusDisplayName == 'Renewed'">Renewed For</label>
+            <span>{{bookList.requestedBy}}</span>
+          </li>
+          <li>
+            <label>Due Date</label>
+            <span>{{bookList.RequestedDate | date: 'd MMM, y'}}</span>
+          </li> -->
+        <!-- <li>
+            <label>Release Date</label>
+            <span>7 July, 2018</span>
+          </li> -->
+        <!-- </ul> -->
+        <!-- added as we need to auto populate the email address to which the mail has to send -->
+        <!-- <div class="pl-notify-box" (click)="togglePopup(bookList.requestedBy)">
+          <span>Notify</span>
+        </div> -->
+
+        <table class="plib-withdraw-info">
+          <tr>
+            <td> <label *ngIf="bookList.bookStatusDisplayName == 'Issued'">Issued For</label>
+              <label *ngIf="bookList.bookStatusDisplayName == 'Renewed'">Renewed For</label>
+            </td>
+            <td>
+              <span>{{bookList.requestedBy}}</span>
+            </td>
+            <td rowspan="2">
+              <div class="pl-notify-box" (click)="togglePopup(bookList.requestedBy)">
+                <span>Notify</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td> <label>Due Date</label>
+            </td>
+            <td>
+              <!-- <span>{{bookList.RequestedDate | date: 'd MMM, y'}}</span> -->
+              <span>{{bookList.dueDate | date: 'd MMM, y'}}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- <a href=""> -->
+
+      <a [routerLink]="['/book-update', bookList.ID]">
+        <button class="pl-update-btn">
+          <span class="">Update</span>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </a>
+      <!-- Added book history link. Tentative design  -->
+      <span class="history-link-admin">
+        <a (click)="showHistoryDialog(bookList.ID);">
+          <i class="fa fa-history">
+          </i>
+          History
+        </a>
+      </span>
+      <button class="pl-delete-btn" [disabled]="bookList.bookStatusDisplayName.trim() != 'Available'" (click)="deleteBook(bookList.ID)">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </li>
+  </ul>
+  <script>
+    $(document).ready(function () {
+      var maxHeightOfFirstBlog = 0;
+      $(".plib-withdraw-info").each(function () {
+        if ($(".plib-withdraw-info").outerHeight() > maxHeightOfFirstBlog) { maxHeightOfFirstBlog = $('.plib-withdraw-info').outerHeight(); }
+      });
+
+      $(".pl-notify-box").height(maxHeightOfFirstBlog);
+    });
+  </script>
+</div>

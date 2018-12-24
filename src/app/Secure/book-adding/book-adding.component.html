@@ -1,0 +1,148 @@
+<title>LMS | {{title}}</title>
+<section class="section">
+    <div class="hp-row">
+        <form [formGroup]="addForm" #bookForm="ngForm" novalidate>
+            <div class="inner-page-container">
+
+                <div class="product-image-box">
+                    <div class="pig-big-image-box">
+                        <div class="pi-big-image">
+                            <img [src]="fileURL" style="width:250px;height:200px;" *ngIf="fileURL != null && fileURL != ''"
+                                id="imageResult">
+                            <input type="file" formControlName="bookImage" name="bookImage" accept="image/x-png,image/jpeg,image/jpg" tabindex="8"
+                                class="form-control" id="bookImage" (change)="onFileChange($event)" ng-model='bookImage'
+                                base-sixty-four-input>
+                        </div>
+                        <input type="hidden" name="fileHidden" formControlName="imageInput" />
+                        <div *ngIf="addForm.controls['imageInput'] != undefined && addForm.controls['imageInput'].invalid && (addForm.controls['imageInput'].dirty || addForm.controls['imageInput'].touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="addForm.controls['imageInput'].errors.required">
+                                bookImage is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-dtl-box">
+                    <div class="product-title">
+                        <input type="text" formControlName="bookTitle" name="bookTitle" class="product-title-txtfld"
+                            placeholder="Book Title" id="bookTitle" tabindex="1">
+                        <div *ngIf="addForm.controls['bookTitle'].invalid && addForm.controls['bookTitle'].touched"
+                            class="alert alert-danger">
+                            <div *ngIf="addForm.controls['bookTitle'].errors.required">
+                                Book Title is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-dec">
+                        <textarea class="product-dec-textared" tabindex="2" [froalaEditor]="froalaOptions" placeholder="Book Description"
+                            formControlName="bookDescription" name="bookDescription" id="bookDescription" ng-model=vm.bookDescription></textarea>
+                        <div *ngIf="addForm.controls['bookDescription'].invalid && addForm.controls['bookDescription'].touched"
+                            class="alert alert-danger">
+                            <div *ngIf="addForm.controls['bookDescription'].errors.required">
+                                Book Description is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="product-info">
+                        <li>
+                            <label for="Availability"> Availability : <span class="requiredSpan">*</span></label>
+                            <span class="instock">
+                                <select class="product-info-txtfld" formControlName="bookStatus" disabled>
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let status of bookStatus" value={{status.ID}}>{{status.Book_status}}
+                                    </option>
+                                </select>
+                                <div *ngIf="addForm.controls['bookStatus'].invalid && (addForm.controls['bookStatus'].dirty || addForm.controls['bookStatus'].touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="addForm.controls['bookStatus'].errors.required">
+                                        Book Title is required.
+                                    </div>
+                                </div>
+
+                            </span>
+                        </li>
+                        <li>
+                            <label for="Author"> Author : </label>
+                            <span>
+                                <input type="text" class="product-info-txtfld" formControlName="bookAuthor" placeholder="Author" tabindex="3"
+                                    name="bookAuthor" id="bookAuthor">
+                            </span>
+                        </li>
+                        <li>
+                            <label for="Type"> Type : <span class="requiredSpan">*</span></label>
+                            <span>
+                                <div>
+                                    <select class="product-info-txtfld" formControlName="bookCategory" tabindex="4">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let category of categorylist" value={{category.ID}}>{{category.Category_Name}}
+                                        </option>
+                                        {{categorylist | json}}
+                                    </select>
+                                    <div *ngIf="addForm.controls['bookCategory'].invalid && (addForm.controls['bookCategory'].dirty || addForm.controls['bookCategory'].touched)"
+                                        class="alert alert-danger">
+                                        <div *ngIf="addForm.controls['bookCategory'].errors.required">
+                                            Book Type is required.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div class="product-donner product-donner-txtfld">
+                        <label for="donner" class="lbl-Donor leftSideLabel"> donor : </label>
+                        <span>
+                            <input type="text" class="product-info-txtfld" formControlName="bookDonner" placeholder="Donner Name" tabindex="5"
+                                name="bookDonner" id="bookDonner">
+                        </span>
+                    </div>
+                    <div class="product-donner product-donner-txtfld">
+                        <label for="quntity" class="lbl-Donor leftSideLabel"> quantity : </label>
+                        <span *ngIf="bookEdit != undefined">
+                            <select class="product-info-txtfld" formControlName="quntity" tabindex="6">
+                                <option value="1" *ngIf="bookEdit != undefined && bookEdit.book_quntity - bookEdit.book_quntity_available <= 1">1</option>
+                                <option value="2" *ngIf="bookEdit != undefined && bookEdit.book_quntity - bookEdit.book_quntity_available <= 2">2</option>
+                                <option value="3" *ngIf="bookEdit != undefined && bookEdit.book_quntity - bookEdit.book_quntity_available <= 3">3</option>
+                                <option value="4" *ngIf="bookEdit != undefined && bookEdit.book_quntity - bookEdit.book_quntity_available <= 4">4</option>
+                                <option value="5" *ngIf="bookEdit != undefined && bookEdit.book_quntity - bookEdit.book_quntity_available <= 5">5</option>
+                            </select>
+                        </span>
+                        <span *ngIf="bookEdit == undefined">
+                            <select class="product-info-txtfld" formControlName="quntity" tabindex="7">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="product-button-row">
+                        <div *ngIf="router.url === '/admin/book-adding'">
+                            <button class="pbr-save-btn" (click)="addBook(addForm)" tabindex="9"
+                                [disabled]="!bookForm.form.valid" type="submit">ADD</button>
+                        </div>
+
+                        <div *ngIf="router.url !== '/admin/book-adding'">
+                            <button class="pbr-save-btn" (click)="updateBook(addForm)" [disabled]="!bookForm.form.valid" tabindex="10"
+                                type="submit">UPDATE</button>
+                        </div>
+
+                        <a href="admin/book-listing">
+                            <div class="pbr-cancel-btn">cancel</div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+    <app-loader></app-loader>
+</section>

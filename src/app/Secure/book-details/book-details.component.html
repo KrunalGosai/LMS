@@ -1,0 +1,202 @@
+<title>LMS | Book Details</title>
+<section class="section">
+
+    <div class="hp-row" *ngIf="currentBookDetails.is_visible != false">
+        <div class="inner-page-container">
+            <div class="product-image-box">
+                <div class="pig-big-image-box">
+                    <div class="pi-big-image">
+                        <img src="{{currentBookDetails.book_cover_image}}">
+                    </div>
+                </div>
+            </div>
+            <div class="product-dtl-box">
+                <div class="product-title" title="{{currentBookDetails.book_title}}">
+                    <!-- {{currentBookDetails.book_title}} -->
+                    {{ (currentBookDetails.book_title != undefined && currentBookDetails.book_title.length>50)? (currentBookDetails.book_title
+                    | slice:0:50)+'..':(currentBookDetails.book_title) }}
+                </div>
+                <!-- title="{{currentBookDetails.book_description}}" -->
+                <div class="product-dec" title="{{plainText}}" [innerHTML]="(currentBookDetails.book_description != undefined && currentBookDetails.book_description.length>250)? (currentBookDetails.book_description | slice:0:250)+'..':(currentBookDetails.book_description)">
+                    <!-- {{currentBookDetails.book_description}} -->
+                </div>
+
+                <div class="product-reviews-summary">
+                    <div class="rating-summary">
+                        <bar-rating [(rate)]="currentBookDetails.rating" [readOnly]=true [max]="5" theme="stars"></bar-rating>
+                        <!-- <bar-rating [(rate)]="cssRate" [readOnly]=true  [max]="5" theme="fontawesome-o"></bar-rating> -->
+                    </div>
+                    <ul class="reviews-actions">
+                        <li>{{totalReview}} Reviews</li>
+                    </ul>
+
+                </div>
+                <ul class="product-info">
+                    <li>
+                        <span>
+                            Availability
+                        </span>
+                        <span class="outstock" *ngIf="currentBookDetails.book_quntity_available <= 0">
+                            Unavailable
+                        </span>
+                        <span class="instock" *ngIf="currentBookDetails.book_quntity_available > 0">
+                            Available
+                        </span>
+                    </li>
+                    <!-- <li *ngIf="currentBookDetails.book_quntity_available <= 0">
+                        <span>
+                            By
+                        </span>
+                        <span class="instock">
+                            {{currentBookDetails.requestedBy | titlecase}}
+                        </span>
+
+                    </li> -->
+                    <li>
+                        <span>
+                            Author
+                        </span>
+                        <span>
+                            {{currentBookDetails.author_name}}
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            Type
+                        </span>
+                        <span>
+                            {{currentBookDetails.categoryDisplayName}}
+                        </span>
+                    </li>
+                </ul>
+                <div class="product-donner">
+
+                    <p>donor</p>
+                    <span>
+                        {{currentBookDetails.Donner.toLowerCase()}}
+                    </span>
+                </div>
+                <!-- <div class="product-issue-row" *ngIf="!borrowBookButton"> -->
+                <!-- <div class="product-issue-row" *ngIf="currentBookDetails.bookStatusDisplayName === 'Requested'">
+                    This book is already requested for the issue, we will let you know once its's available.
+                </div>
+                <div class="product-issue-row" *ngIf="currentBookDetails.bookStatusDisplayName === 'Issued' || currentBookDetails.bookStatusDisplayName === 'Returned'">
+                    This Books is already issued.
+                </div> -->
+                <div class="product-issue-row" *ngIf="currentBookDetails.bookStatusDisplayName === 'Deleted'">
+                    Books unavailable. Please select another book.
+                </div>
+                <!-- </div> -->
+                <div class="product-issue-row" *ngIf="borrowBookButton && currentBookDetails.book_quntity_available > 0">
+                    <div class="product-issue-btn" role="button" *ngIf="!issueBookPortion" (click)="issueBookShow();">Borrow This Book</div>
+                    <ul class="product-issue-info" *ngIf="issueBookPortion">
+                        <li>
+                            <span>Issue Date</span>
+                            <div class="pii-textfld" #issueSelectedDate>{{ todayDate | date:'dd MMM,yyyy'}}</div>
+                        </li>
+                        <li>
+                            <span>Return Date</span>
+                            <div class="pii-textfld" #dueSelectedDate>{{ dueDate | date:'dd MMM,yyyy'}}</div>
+                        </li>
+                        <li>
+                            <div class="pii-button" (click)="issueBook(getuserName)">Issue The Book</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-comment-section">
+                <div class="pcs-title">
+                    Book Comment
+                    <span class="history-link">
+                        <a (click)="showHistoryDialog();" *ngIf="isAdmin == 'true'">
+                            <i class="fa fa-history"></i>
+                            History</a>
+                    </span>
+                </div>
+                <div class="">
+                    <form [formGroup]="commentForm" (ngSubmit)="onCommentSubmit(commentDescription,rates, currentBookDetails.ID,getuserName)">
+                        <div class="form-group">
+
+                            <textarea type="text" #commentDescription formControlName="comment" class="form-control prl-feedback-txtarea" [ngClass]="{ 'is-invalid': submitted && f.comment.errors }"></textarea>
+                            <div *ngIf="submitted && f.comment.errors" class="invalid-feedback alert alert-danger">
+                                <div *ngIf="f.comment.errors.required">Comment is required</div>
+                            </div>
+                        </div>
+                        <div class="prl-rating-box">
+                            <bar-rating [(rate)]="rates" [max]="5" [theme]="'stars'"></bar-rating>
+                            <!-- <bar-rating [rate]="faoRate"  [max]="10" theme="fontawesome-o"></bar-rating> -->
+                        </div>
+                        <div class="form-group">
+                            <button class="prl-submit-btn">
+                                submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <ul class="book-reviewer-list">
+                    <li *ngIf="bookComments.length == 0">No Comments.</li>
+                    <li *ngFor="let bookComment of bookComments; let i = index">
+
+                        <div class="brl-name">
+                            {{bookComment.User_id | titlecase}}
+                        </div>
+                        <div class="brl-rating">
+                            <bar-rating [(rate)]="bookComment.Rating" [readOnly]=true [max]="5" [theme]="'stars'"></bar-rating>
+                        </div>
+                        <div class="brl-date">
+                            {{bookComment.Created | date:'dd MMM,yyyy'}}
+                        </div>
+                        <div class="brl-comment">
+                            {{bookComment.Comments}}
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3 *ngIf="currentBookDetails.is_visible == false">Book Not Available</h3>
+
+    <app-loader></app-loader>
+
+    <div class="mail-popup-box" [ngClass]="showModel ? 'show' : 'hide'">
+        <div class="mpb-full-background"></div>
+        <div class="mpb-opopup-window">
+            <div class="mpb-header">
+                <span>History</span>
+                <div class="mpb-close-btn" (click)="closeHistoryDialog()">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="mpb-content">
+                <div class="mpb-form">
+                    <p class="no-history" *ngIf="bookHisoryData.length == 0">No History Data</p>
+                    <table class="table table-striped" *ngIf="bookHisoryData.length > 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of bookHisoryData; let ind = index">
+                                <th scope="row">{{ind + 1}}</th>
+                                <td>{{row.user_id}}</td>
+                                <td>{{row.bookStatusDisplayName}}</td>
+                                <td>{{row.issueDate | date:'dd MMM, y'}}</td>
+                                <td>{{row.dueDate | date:'dd MMM, y'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <h1>Angular Star Rating Component</h1>
+<star-rating-comp></star-rating-comp> -->
+</section>

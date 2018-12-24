@@ -1,0 +1,13 @@
+@import '~ngx-toastr/toastr.css';
+.stars { margin-top: 100px; }
+.link { margin-left: 5px; cursor: pointer; text-decoration: none; color: #50e3c2; }
+.product-dec{ word-break: break-all !important; white-space: pre-wrap; }
+.pii-textfld{ padding: 4% 5%; }
+.history-link,.history-link > a{ float: right; color: #333;}
+.history-link:hover,.history-link > a:hover{text-decoration: none; color: #333 !important;}
+.hide{display: none;}
+.show{display: block;}
+.mail-popup-box{left: 0px; top:0px;}
+.no-history{text-align: center;}
+.mpb-form{max-height: 390px; overflow: scroll; overflow-x: auto; overflow-y: auto}
+.product-donner span{text-transform: capitalize !important;}

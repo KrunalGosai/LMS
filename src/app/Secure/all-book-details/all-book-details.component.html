@@ -1,0 +1,19 @@
+<title>LMS | All Books</title>
+<section class="section">
+    <div class="hp-row">
+        <div class="book-listing-row">
+            <ul class="book-listing">
+                <li *ngFor="let bookDetail of bookDetails; let i = index">
+                    <a [routerLink]="['/book-details',bookDetail.ID]">
+                        <img src="{{bookDetail.book_cover_image}}" (error)="imageError($event)">
+                        <div class="bl-title" title="{{bookDetail.book_title}}">
+                                {{ (bookDetail.book_title.length>30)? (bookDetail.book_title | slice:0:30)+'..':(bookDetail.book_title) }}
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <app-loader></app-loader>
+</section>

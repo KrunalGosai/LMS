@@ -1,0 +1,171 @@
+<title>LMS | Dashboard</title>
+<!-- <app-navigation></app-navigation> -->
+<section class="section">
+    <div class="hp-row">
+        <div class="inner-container">
+            <div class="image-category-row">
+                <div class="cate-width-25 margin-right-30">
+                    <div class="category-box category-box-1">
+                        <a href="#">
+                            <img src="~/../assets/Images/category-box-1-img.jpg">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cate-width-75">
+                    <div class="cate-row margin-bottom-30">
+                        <div class="cate-width-57 margin-right-30">
+                            <div class="category-box category-box-2">
+                                <a href="#">
+                                    <img src="~/../assets/Images/category-box-2-img.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="cate-width-43">
+                            <div class="category-box category-box-3">
+                                <a href="#">
+                                    <img src="~/../assets/Images/category-box-3-img.jpg">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cate-row">
+                        <div class="cate-width-43 margin-right-30">
+                            <div class="category-box category-box-4">
+                                <a href="#">
+                                    <img src="~/../assets/Images/category-box-4-img.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="cate-width-57">
+                            <div class="category-box category-box-5">
+                                <a href="#">
+                                    <img src="~/../assets/Images/category-box-5-img.jpg">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-category-row">
+                <div class="category-box category-box-1">Comics Book</div>
+                <div class="category-box category-box-2">Arts & Photography Book</div>
+                <div class="category-box category-box-3">Business & Money Book</div>
+                <div class="category-box category-box-4">Children's Book</div>
+                <div class="category-box category-box-5">Travel Book</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hp-row">
+        <div class="inner-container">
+            <div class="hp-row-title">
+                NEW BOOKS
+            </div>
+            <div class="hp-row-dec">
+                Explore the recently added books in the library                
+                <!-- Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's -->
+            </div>
+        </div>
+
+        <div class="book-listing-row">
+            <div class="book-listing-arrow bla-left-side" >
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/left-side-arrow.png" *ngIf="latestBookDetails.length > 4">
+                </a>
+            </div>
+            <div class="book-listing-arrow bla-right-side" >
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/right-side-arrow.png" *ngIf="latestBookDetails.length > 4">
+                </a>
+            </div>
+            <ul class="book-listing">
+                <li *ngFor="let bookDetail of latestBookDetails; let i = index">
+                    <a [routerLink]="['book-details',bookDetail.ID]">
+                        <img src="{{bookDetail.book_cover_image}}" (error)="imageError($event)">
+                        <div class="bl-title" title="{{bookDetail.book_title}}">
+
+                            <!-- //to wrap the title of the book below the image to 30 characters as name overflows
+    //append "..." to indicate long name of the books -->
+                            {{ (bookDetail.book_title.length>30)? (bookDetail.book_title | slice:0:30)+'..':(bookDetail.book_title) }}
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="hp-row">
+
+        <div class="inner-container">
+            <div class="hp-row-title">TOP rating</div>
+            <div class="hp-row-dec">
+                Explore the highest rated books by readers
+                <!-- Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's -->
+            </div>
+        </div>
+
+        <div class="book-listing-row">
+            <div class="book-listing-arrow bla-left-side" >
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/left-side-arrow.png" *ngIf="topRatedBookDetails?.length > 4">
+                </a>
+            </div>
+            <div class="book-listing-arrow bla-right-side">
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/right-side-arrow.png" *ngIf="topRatedBookDetails?.length > 4">
+                </a>
+            </div>
+            <ul class="book-listing">
+                <li *ngFor="let bookDetail of topRatedBookDetails; let i = index">
+                    <a [routerLink]="['book-details',bookDetail.ID]">
+                        <img src="{{bookDetail.book_cover_image}}" (error)="imageError($event)">
+                        <div class="bl-title" title="{{bookDetail.book_title}}">
+                            {{ (bookDetail.book_title.length>30)? (bookDetail.book_title | slice:0:30)+'..':(bookDetail.book_title) }}
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="hp-row">
+
+        <div class="inner-container">
+            <div class="hp-row-title">Most Read</div>
+            <div class="hp-row-dec">
+                Explore the most read books by readers
+                <!-- Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's -->
+            </div>
+        </div>
+
+        <div class="book-listing-row">
+            <div class="book-listing-arrow bla-left-side" *ngIf="latestBookDetails?.length > 4">
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/left-side-arrow.png">
+                </a>
+            </div>
+            <div class="book-listing-arrow bla-right-side"  *ngIf="latestBookDetails?.length > 4">
+                <a [routerLink]="['all-book-details','Top Rated']">
+                    <img src="~/../assets/Images/right-side-arrow.png">
+                </a>
+            </div>
+            <ul class="book-listing">
+                <li *ngFor="let bookDetail of latestBookDetails; let i = index">
+                    <a [routerLink]="['book-details',bookDetail.ID]">
+                        <img src="{{bookDetail.book_cover_image}}" (error)="imageError($event)">
+                        <div class="bl-title" title="{{bookDetail.book_title}}">
+                            {{ (bookDetail.book_title.length>30)? (bookDetail.book_title | slice:0:30)+'..':(bookDetail.book_title) }}
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <app-loader></app-loader>
+
+</section>

@@ -1,0 +1,115 @@
+<title>LMS | My Activity</title>
+<section class="section">
+    <div class="hp-row">
+        <div class="inner-page-container">
+            <ul class="product-return-listing">
+                <p *ngIf="isShowNoData && (bookDetails == undefined || bookDetails.length == 0)" class="noData">No
+                    books found!</p>
+                <li *ngFor="let bookDetail of bookDetails; let i = index">
+                    <!-- <div class="prl-product-info-box-overlay" *ngIf="bookDetail.is_visible == false"></div> -->
+                    <div class="prl-product-info-box" [ngClass]="{ 'HideDeleteBook':bookDetail.is_visible==false }">
+                        <div class="prl-product-image">
+                            <!-- <img src="{{bookDetail.image}}"> -->
+                            <a [routerLink]="['/book-details',bookDetail.book_id]">
+                                <img src="{{bookDetail.image}}">
+                            </a>
+                        </div>
+                        <div class="prl-prodcut-info">
+                            <div class="prl-product-name" title="{{bookDetail.book_title}}">
+                                <!-- {{bookDetail.book_title}} -->
+                                <a [routerLink]="['/book-details',bookDetail.book_id]" style="text-decoration:none">
+                                    {{ (bookDetail.book_title.length>50)? (bookDetail.book_title |
+                                    slice:0:50)+'...':(bookDetail.book_title) }}
+                                </a>
+                            </div>
+                            <ul class="prl-product-dates">
+                                <li>
+                                    <label>Issue Date</label>
+                                    <span>{{bookDetail.issueDate | date: 'd MMM, y'}}</span>
+                                </li>
+                                <li *ngIf="bookDetail.book_Status != 'Returned'">
+                                    <label>Due Date</label>
+                                    <span>{{bookDetail.dueDate | date: 'd MMM, y'}}</span>
+                                </li>
+                                <li *ngIf="bookDetail.book_Status != 'Request Rejected'">
+                                    <!-- <label *ngIf="bookDetail.book_Status != 'Returned'">Tentative Return Date</label> -->
+                                    <label *ngIf="bookDetail.book_Status == 'Returned'">Return Date</label>
+                                    <span *ngIf="bookDetail.book_Status == 'Returned'">{{bookDetail.returnDate | date: 'd MMM, y'}}</span>
+                                </li>
+                            </ul>
+                            <ul class="prl-product-dates">
+                                <li>
+                                    <label>Book Status</label>
+
+                                    <span *ngIf="bookDetail.is_visible==true">{{bookDetail.book_Status}}</span>
+                                    <span *ngIf="bookDetail.is_visible==false" class="DeleteBookStatus">Deleted</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="prl-product-return-btn" (click)="ResetControlValue()" *ngIf="bookDetail.is_visible == true && (bookDetail.book_Status == 'Issued' || bookDetail.book_Status == 'Renewed' || bookDetail.book_Status == 'Renew Rejected')">
+                            <span>Return</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="prl-product-feedback-box" >
+                        <form [formGroup]="returbTypeForm">
+                            <input type="radio" formControlName="returnType" [(ngModel)]="returnResons" value="Return"
+                                (click)="returnResons = 'Return'"> <span>Return</span>
+                            <!-- <input type="radio" formControlName="returnType" [(ngModel)]="returnResons" value="Extend"
+                                (click)="returnResons = 'Extend'"> Extend -->
+                            <input type="radio" formControlName="returnType" [(ngModel)]="returnResons" value="Renew" *ngIf="bookDetail.book_Status != 'Renewed'"
+                                (click)="returnResons = 'Renew'"> <span *ngIf="bookDetail.book_Status != 'Renewed'">Renew</span>
+                        </form>
+                        <form *ngIf="returnResons == 'Return'" [formGroup]="commentForm" (ngSubmit)="onCommentSubmit(commentDescription,rates, bookDetail.book_id, bookDetail.user_id)">
+                            <div class="form-group">
+                                <textarea type="text" #commentDescription formControlName="comment" class="form-control prl-feedback-txtarea"
+                                    [ngClass]="{ 'is-invalid': submitted && f.comment.errors }"></textarea>
+                                <div *ngIf="submitted && f.comment.errors" class="invalid-feedback alert alert-danger">
+                                    <div *ngIf="f.comment.errors.required">Comment is required</div>
+                                </div>
+                            </div>
+                            <div class="prl-rating-box">
+                                <bar-rating [(rate)]="rates" [max]="5" [theme]="'stars'"></bar-rating>
+                                <!-- <bar-rating [rate]="faoRate" [max]="10" theme="fontawesome-o"></bar-rating> -->
+                            </div>
+                            <div class="form-group">
+                                <button class="prl-submit-btn">
+                                    submit
+                                </button>
+                            </div>
+                        </form>
+                        <form [formGroup]="renewForm" *ngIf="returnResons == 'Renew'" (ngSubmit)="onRenewCommentSubmit(renewCommentommentDescription, bookDetail.book_id, bookDetail.user_id)">
+                            <div class="form-group">
+                                <textarea type="text" class="mb-10" #renewCommentommentDescription formControlName="renewComment"
+                                    class="form-control prl-feedback-txtarea" [ngClass]="{ 'is-invalid': renewSubmitted && r.renewComment.errors }"></textarea>
+                                <div *ngIf="renewSubmitted && r.renewComment.errors" class="invalid-feedback alert alert-danger">
+                                    <div *ngIf="r.renewComment.errors.required">Comment is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="prl-submit-btn btnrenew">
+                                    Renew
+                                </button>
+                            </div>
+                        </form>
+                        <form [formGroup]="extendForm" *ngIf="returnResons == 'Extend'" (ngSubmit)="onExtendCommentSubmit(extendCommentDescription, bookDetail.book_id, bookDetail.user_id)">
+                            <div class="form-group">
+                                <textarea type="text" #extendCommentDescription formControlName="extendComment" class="form-control prl-feedback-txtarea"
+                                    [ngClass]="{ 'is-invalid': extendSubmitted && e.extendComment.errors }"></textarea>
+                                <div *ngIf="extendSubmitted && e.extendComment.errors" class="invalid-feedback alert alert-danger">
+                                    <div *ngIf="e.extendComment.errors.required">Comment is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="prl-submit-btn">
+                                    Extend
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <app-loader></app-loader>
+</section>
